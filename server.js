@@ -47,9 +47,17 @@ app.post('/create-checkout-session', async (req, res) => {
       success_url: 'http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}',
       cancel_url: 'http://localhost:5173/cart',
       metadata: {
-        cartItems: JSON.stringify(items),
+        cartItems: JSON.stringify(
+          items.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            image: item.image,
+          }))  
+        ),
       },
-    });
+    });  
 
     res.json({ url: session.url });
   } catch (err) {
